@@ -3,7 +3,7 @@ import React from 'react'
  const Main = () => {
   return (
     <div className="container">
-    <div className="wrapper">
+    {/* <div className="wrapper"> */}
       <h1>Currency Converter</h1>
       <p className="main">
         Check live rates, set rate alerts, receive<br /> notifications and more.
@@ -28,7 +28,7 @@ import React from 'react'
 
       <p className="down-text">Indicative Exchange Rate</p>
       <h3>1 SGD = 0.7367 USD</h3>
-    </div>
+    {/* </div> */}
   </div>
   )
 }

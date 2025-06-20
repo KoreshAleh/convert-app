@@ -81,10 +81,13 @@ function App() {
 
  }
 
- const toggleTheme = () => {
+const toggleTheme = () => {
   setDark((prev) => {
     const newTheme = !prev;
     localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+    
+    document.body.classList.toggle('dark', newTheme);
+
     return newTheme;
   });
 };
@@ -104,9 +107,12 @@ function App() {
 setConvertedAmount((amount * rate).toFixed(2));
       });
 
-      const savedTheme = localStorage.getItem('theme');
-      const isDarkMode = savedTheme === 'dark';
-      setDark(isDarkMode);
+    const savedTheme = localStorage.getItem('theme');
+  const isDarkMode = savedTheme === 'dark';
+  setDark(isDarkMode);
+
+
+  document.body.classList.toggle('dark', isDarkMode);
   
   }, [fromCurrency, toCurrency, amount]);
 
@@ -118,7 +124,7 @@ setConvertedAmount((amount * rate).toFixed(2));
    <> 
    
    <div className="container">
-    <div className={`wrapper ${isDark ? 'dark' : ''}`}>
+    <div>
       <h1>Currency Converter</h1>
       <p className="main">
         Check live rates, set rate alerts, receive<br /> notifications and more.
@@ -131,7 +137,7 @@ setConvertedAmount((amount * rate).toFixed(2));
       <div className="block">
         <p className="amount">Amount</p>
         <div className="up">
-          <img src={fromFlag} />
+          <img src={fromFlag} alt={`${fromCurrency} flag`} />
           <h2>{fromCurrency}</h2>
           <select value={fromCurrency} onChange={e => setFromCurrency(e.target.value)}>
               {currencies.map(c => (
@@ -144,7 +150,7 @@ setConvertedAmount((amount * rate).toFixed(2));
         <img src="/img/free-icon-swap-arrows-18559749.png"c width="44px" height="44px" alt="" className="ell" onClick={change}></img>
         <p className="conver">Converted Amount</p>
         <div className="down">
-          <img src={toFlag} alt="USD"  />
+          <img src={toFlag} alt={`${toCurrency} flag`} />
           <h2>{toCurrency}</h2>
           <select value={toCurrency} onChange={e => setToCurrency(e.target.value)} >
               {currencies.map(c => (

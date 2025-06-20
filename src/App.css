@@ -5,6 +5,16 @@
 }
 
 
+body.dark {
+  background-color: #121212;
+  color: white;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
 
 .container{
 
@@ -14,7 +24,7 @@
 }
 
 
-.wrapper{
+/* .wrapper{
   width: 352px;
   height: 583px;
   border: 1px solid black;
@@ -22,7 +32,7 @@
 
   
 
-}
+} */
 
 .up{
   display: flex;
@@ -149,31 +159,33 @@ margin-left: 1px;
 }
 
 
-.wrapper.dark {
+body.dark {
   background-color: #121212;
   color: white;
 
 }
 
-.wrapper.dark .block{
-  /* border: 1px solid white; */
-  box-shadow: 4px 4px 10px rgba(253, 253, 253, 0.966);
+body.dark .block{
+  border: 1px solid white;
+  box-shadow: 0 0 20px rgba(253, 253, 253, 0.966);
 
 }
 
-.wrapper.dark h1,
-.wrapper.dark h2,
-.wrapper.dark p,
-.wrapper.dark .main,
-.wrapper.dark .down-text,
-.wrapper.dark .amount,
-.wrapper.dark .conver {
+body.dark h1,
+body.dark h2,
+body.dark p,
+body.dark .main,
+body.dark .down-text,
+body.dark .amount,
+body.dark .conver {
   color: white;
 }
 
-.wrapper.dark select{
+body.dark select{
   color: darkcyan;
 }
+
+
 
 
 
