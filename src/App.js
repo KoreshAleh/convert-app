@@ -1,9 +1,12 @@
 
 import './App.css';
 import React, {useEffect, useState} from 'react';
+import Main from './compponents/Main';
 
 
 function App() {
+
+  
   const currencies = [
     { code: "USD", name: "US Dollar", country: "US" },
     { code: "EUR", name: "Euro", country: "EU" },
@@ -61,17 +64,16 @@ function App() {
     { code: "IQD", name: "Iraqi Dinar", country: "IQ" }
   ].map(c => ({
     ...c,
-    flag: `https://flagcdn.com/32x24/${c.country.toLowerCase()}.png`
+    flag: `https://flagcdn.com/32x24/${c.country.toLowerCase()}.png`  // массив валют + добавленре картинок
   }));
-  
-  
 
-  const [fromCurrency, setFromCurrency] = useState('USD')
-  const [toCurrency, setToCurrency] = useState('EUR')
-  const [amount, setAmount] = useState(0);
-  const [convertedAmount, setConvertedAmount] = useState(null);
+  const [fromCurrency, setFromCurrency] = useState('USD') // хронит и меняет значения названия валюты при этом  от этого завсит какой будет флаг
+  const [toCurrency, setToCurrency] = useState('EUR') // тоже самое только для другой валюты
+  const [amount, setAmount] = useState('');
   const [rate, setRate] = useState(null);
   const [isDark, setDark] = useState(false);
+  const [amount2, setAmount2] = useState('');
+  const [isFlag, setIsFlag] = useState(false)
 
 
  const change = () => {
@@ -80,6 +82,8 @@ function App() {
     setRate(null)
 
  }
+
+
 
 const toggleTheme = () => {
   setDark((prev) => {
@@ -97,24 +101,50 @@ const toggleTheme = () => {
   const toFlag = currencies.find(c => c.code === toCurrency)?.flag;
   
 
+   const handelFrom = (e) => {
+  const value = e.target.value
+  setAmount(value)
+
+  setIsFlag(true)
+  
+
+ }
+
+ const handelTo = (e) => {
+    const value  = e.target.value
+    setAmount2(value)
+    setIsFlag(false)
+ }
+
   useEffect(() => {
-   
-    fetch(`https://v6.exchangerate-api.com/v6/ad7dc6cde6cf56400ef82f47/latest/${fromCurrency}`)
+
+    fetch(`https://v6.exchangerate-api.com/v6/13fce4155c3b509ca5d42a7e/latest/${fromCurrency}`)
       .then(res => res.json())
       .then(data => {
         const rate = data.conversion_rates[toCurrency];
         setRate(rate);
-setConvertedAmount((amount * rate).toFixed(2));
+
+
+        if(isFlag){
+          const a = parseFloat((amount * rate).toFixed(2))
+           setAmount2(a)
+        }else{
+          const b = parseFloat((amount2 / rate).toFixed(2))
+           setAmount(b)
+        }
+
       });
 
     const savedTheme = localStorage.getItem('theme');
   const isDarkMode = savedTheme === 'dark';
   setDark(isDarkMode);
+ 
 
 
   document.body.classList.toggle('dark', isDarkMode);
   
-  }, [fromCurrency, toCurrency, amount]);
+  }, [fromCurrency, toCurrency, amount, amount2, isFlag]);
+
 
 
 
@@ -123,51 +153,24 @@ setConvertedAmount((amount * rate).toFixed(2));
    
    <> 
    
-   <div className="container">
-    <div>
-      <h1>Currency Converter</h1>
-      <p className="main">
-        Check live rates, set rate alerts, receive<br /> notifications and more.
-      </p>
-      <button className={`btn-dark-mode ${isDark ? "btn-dark-mode--active" : ''}`} onClick={toggleTheme} >
-                
-                <img src="/img/Sun.svg" alt="" className="btn-dark-mode-img" width="16px" />
-                <img src="/img/Moon.svg" alt="" className="btn-dark-mode-img" width="16px"/>
-            </button>
-      <div className="block">
-        <p className="amount">Amount</p>
-        <div className="up">
-          <img src={fromFlag} alt={`${fromCurrency} flag`} />
-          <h2>{fromCurrency}</h2>
-          <select value={fromCurrency} onChange={e => setFromCurrency(e.target.value)}>
-              {currencies.map(c => (
-           <option  key={c.code} value={c.code}>{c.code}</option>
-        ))}
-       </select>
-          <input type="text"    onChange={e => setAmount(e.target.value)}  placeholder='0.00'/>
-        </div>
-        <hr />
-        <img src="/img/free-icon-swap-arrows-18559749.png"c width="44px" height="44px" alt="" className="ell" onClick={change}></img>
-        <p className="conver">Converted Amount</p>
-        <div className="down">
-          <img src={toFlag} alt={`${toCurrency} flag`} />
-          <h2>{toCurrency}</h2>
-          <select value={toCurrency} onChange={e => setToCurrency(e.target.value)} >
-              {currencies.map(c => (
-           <option  key={c.code} value={c.code} >{c.code}</option>
-        ))}
-       </select>
-          <input type="text "    value={convertedAmount || ''} 
-  readOnly  />
-        </div>
-      </div>
-
-      <p className="down-text">Indicative Exchange Rate</p>
-{rate && (
-  <h3>1 {fromCurrency} = {rate} {toCurrency}</h3>
-)}
-    </div>
-  </div>
+    <Main
+      fromCurrency={fromCurrency}
+      setFromCurrency={setFromCurrency}
+      toCurrency={toCurrency}
+      setToCurrency={setToCurrency}
+      rate={rate}
+      toFlag={toFlag}
+      isDark={isDark}
+      currencies={currencies}
+      toggleTheme={toggleTheme}
+      setAmount={setAmount}
+      fromFlag={fromFlag}
+      change={change}
+      handelFrom={handelFrom}
+      handelTo={handelTo}
+      amount={amount}
+      amount2={amount2}
+    />
 
    </>
   );
